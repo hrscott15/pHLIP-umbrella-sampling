@@ -1,0 +1,83 @@
+colvarsTrajFrequency        20
+colvarsRestartFrequency  25000000
+
+
+colvar {
+   name Translocation
+
+   width 0.1
+
+   lowerboundary   -40
+   upperboundary     33.0
+   lowerWall       -40
+   upperWall       33
+   lowerwallconstant 100.0
+   upperwallconstant 100.0
+
+   distanceZ {
+      main {
+         atomnumbers { 482 }
+      }
+      ref  {
+         atomnumbers {
+590 724 858 992 1126 1260 1394 1528 1662 1796 1930 2064 2198 2332 2466 2600 2734 2868 3002 3136 3270 3404 3538 3672 3806 3940 4074 4208 4342 4476 4610 4744 4878 5012 
+5146 5280 5414 5548 5682 5816 5950 6084 6218 6352 6486 6620 6754 6888 7022 7156 7290 7424 7558 7692 7826 7960 8094 8228 8362 8496 8630 8764 8898 9032 9166 9300 9434 
+9568 9702 9836 9970 10104 10238 10372 10506 10640 10774 10908 11042 11176 11310 11444 11578 11712 11846 11980 12114 12248 12382 12516 12650 12784 12918 13052 13186 
+13320 13454 13588 13722 13856 13990         }
+      }
+      axis  ( 0.0,  0.0,  1.0 )
+   }
+}
+
+harmonic {
+        name Z
+	colvars Translocation
+        centers CENTER
+        forceConstant 0.025;# 2.5 * 0.1^2 = 0.025
+}
+
+colvar {
+   name popc_head_upper
+   distanceZ {
+      ref {
+         # dummyAtom is used for a fixed point of reference
+         dummyAtom ( 0.000, 0.000, 0.000 )
+      }
+      main {
+         atomsFile     ../parameters/popc_head_upper.ref
+         atomsCol	B
+         atomsColValue  1.0
+      }
+   }
+   # set upperBoundary @ 23 A to prevent bilayer from
+   # diffusing in positive z direction as pHLIP is pulled out
+   upperWall            23.0
+   upperBoundary        23.0
+   upperWallConstant    1000.0
+}
+
+#harmonic {
+#   colvars popc_head_upper
+#   centers 15
+#   forceConstant 10
+#}
+
+colvar {
+   name popc_head_lower
+   distanceZ {
+      ref {
+        dummyAtom ( 0.000, 0.000, 0.000 )
+      }
+      main {
+         atomsFile      ../parameters/popc_head_lower.ref
+         atomsCol	B
+         atomsColValue  1.0
+      }
+   }
+   # set upperBoundary to -18.0 A to prevent lower
+   # leaflet from being pulled along as pHLIP exits
+   upperWall            -18.0
+   upperBoundary        -18.0
+   upperWallConstant    1000.0
+}
+
